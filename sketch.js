@@ -49,10 +49,8 @@ function createUI() {
 function draw() {
   background(220);
 
-  // 비디오 데이터 로드
   video.loadPixels();
 
-  // 색상 감지 활성화 시, 비디오 데이터에서 직접 색상 추출
   let r = 0, g = 0, b = 0, count = 0;
   if (isColorDetectionActive) {
     const boxSize = 50;
@@ -61,7 +59,6 @@ function draw() {
     const xStart = centerX - boxSize / 2;
     const yStart = centerY - boxSize / 2;
 
-    // 비디오 픽셀 데이터에서 중앙 사각형 영역의 RGB 평균 계산
     for (let x = xStart; x < xStart + boxSize; x++) {
       for (let y = yStart; y < yStart + boxSize; y++) {
         const index = (y * video.width + x) * 4;
@@ -75,16 +72,13 @@ function draw() {
     g = Math.round(g / count);
     b = Math.round(b / count);
 
-    // UI 표시용 데이터 (공백 포함)
     const displayData = `R${String(r).padStart(3, "0")} G${String(g).padStart(3, "0")} B${String(b).padStart(3, "0")}`;
-    // 전송용 데이터 (공백 없이)
     const sendData = `R${String(r).padStart(3, "0")}G${String(g).padStart(3, "0")}B${String(b).padStart(3, "0")}`;
     
     sendBluetoothData(sendData);
     colorDisplay.html(`마이크로비트로 전송된 데이터: ${displayData}`);
   }
 
-  // 캔버스에 비디오 렌더링 (색상 추출 후)
   if (isFlipped) {
     push();
     translate(width, 0);
@@ -95,14 +89,12 @@ function draw() {
     image(video, 0, 0);
   }
 
-  // 중앙 사각형 그리기
   const boxSize = 50, centerX = width / 2, centerY = height / 2;
   noFill();
   stroke(255, 0, 0);
   strokeWeight(2);
   rect(centerX - boxSize / 2, centerY - boxSize / 2, boxSize, boxSize);
 
-  // 색상 미리보기 (추출된 색상으로)
   if (isColorDetectionActive) {
     const previewSize = 50;
     fill(r, g, b);
